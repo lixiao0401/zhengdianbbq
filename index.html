@@ -1,0 +1,676 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>鏁寸偣鐑х儰 - 鍦ㄧ嚎鐐归</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'Microsoft YaHei', sans-serif;
+  background: #f5e6d3;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+/* 椤堕儴 */
+.header {
+  background: linear-gradient(135deg, #e85d00, #cc3300);
+  padding: 20px 16px 16px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.header .brand {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3px;
+}
+.header .slogan {
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+.header .slogan .hot { color: #ffdd44; }
+
+/* 鑿滃崟鍒嗙被 */
+.category {
+  margin: 10px 12px 6px;
+}
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 6px;
+}
+.cat-tag {
+  background: linear-gradient(135deg, #e85d00, #cc3300);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 4px;
+}
+.cat-title {
+  color: #8a4a2a;
+  font-size: 15px;
+  font-weight: 700;
+}
+.cat-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(200,120,60,0.2), transparent);
+}
+
+/* 鑿滃崟椤?*/
+.menu-list { display: flex; flex-direction: column; gap: 4px; }
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #fffcf8;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.item-info .name {
+  color: #4a2a1a;
+  font-size: 14px;
+  font-weight: 700;
+}
+.item-info .name .hot {
+  color: #ff4400;
+  font-size: 12px;
+  margin-right: 2px;
+}
+.item-info .desc {
+  color: #8a7a6a;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.item-price {
+  color: #cc5500;
+  font-size: 16px;
+  font-weight: 900;
+}
+.item-price small {
+  font-size: 11px;
+  font-weight: 400;
+  color: #996644;
+}
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-minus, .btn-plus {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.btn-minus {
+  background: #f0e0d0;
+  color: #885533;
+}
+.btn-minus:active { background: #e0d0c0; }
+.btn-plus {
+  background: linear-gradient(135deg, #e85d00, #cc3300);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(200,50,0,0.2);
+}
+.btn-plus:active { transform: scale(0.95); }
+.item-count {
+  color: #4a2a1a;
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* 璐墿杞﹀簳閮?*/
+.cart-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2a1a0a;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.cart-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cart-icon-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ff4400;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.cart-info .total-label {
+  color: #aa8866;
+  font-size: 11px;
+}
+.cart-info .total-price {
+  color: #ffaa44;
+  font-size: 20px;
+  font-weight: 900;
+}
+.cart-info .total-price small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #aa7744;
+}
+.btn-order {
+  background: linear-gradient(135deg, #ff6a00, #ff4400);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255,50,0,0.3);
+  transition: all 0.15s;
+}
+.btn-order:active { transform: scale(0.96); }
+.btn-order:disabled { opacity: 0.4; }
+
+/* 璁㈠崟寮圭獥 */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+}
+.overlay.show { display: block; }
+.order-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  background: #fffcf8;
+  border-radius: 20px 20px 0 0;
+  z-index: 201;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+.order-panel.show { transform: translateY(0); }
+.order-panel .handle {
+  width: 40px; height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  margin: 10px auto;
+}
+.order-panel .panel-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #4a2a1a;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+.order-list { padding: 10px 16px; }
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5ede5;
+}
+.order-item .left .oname {
+  color: #4a2a1a;
+  font-size: 14px;
+  font-weight: 700;
+}
+.order-item .left .oqty {
+  color: #8a7a6a;
+  font-size: 12px;
+}
+.order-item .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.order-item .right .oprice {
+  color: #cc5500;
+  font-size: 14px;
+  font-weight: 700;
+}
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px 16px;
+  border-top: 1px solid #eee;
+}
+.order-total .tt { color: #4a2a1a; font-size: 15px; font-weight: 700; }
+.order-total .tp { color: #cc5500; font-size: 20px; font-weight: 900; }
+.order-total .tp small { font-size: 12px; font-weight: 400; color: #996644; }
+.panel-actions {
+  display: flex;
+  gap: 10px;
+  padding: 0 16px 20px;
+}
+.panel-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-clear {
+  background: #f0e0d0;
+  color: #885533;
+}
+.btn-submit {
+  background: linear-gradient(135deg, #ff6a00, #ff4400);
+  color: #fff;
+}
+
+/* 鎴愬姛寮圭獥 */
+.success-toast {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 24px;
+  text-align: center;
+  z-index: 202;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  min-width: 280px;
+}
+.success-toast.show { display: block; }
+.success-toast .emoji { font-size: 48px; }
+.success-toast .msg { color: #4a2a1a; font-size: 16px; font-weight: 700; margin-top: 8px; }
+.success-toast .sub { color: #8a7a6a; font-size: 13px; margin-top: 4px; }
+.success-toast .btn-ok {
+  margin-top: 14px;
+  background: linear-gradient(135deg, #e85d00, #cc3300);
+  color: #fff;
+  border: none;
+  padding: 8px 32px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 380px) {
+  .menu-item { padding: 8px 12px; }
+  .item-info .name { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 椤堕儴 -->
+<div class="header">
+  <div class="brand">馃敟 鏁寸偣鐑х儰</div>
+  <div class="slogan"><span class="hot">鉂?/span> 鏁寸偣灏忕儳鐑?路 蹇箰娌＄儲鎭?/div>
+</div>
+
+<!-- 鑿滃崟瀹瑰櫒 -->
+<div id="menuContainer"></div>
+
+<!-- 璐墿杞?-->
+<div class="cart-bar">
+  <div class="cart-left" onclick="toggleCart()">
+    <div class="cart-icon-wrap">
+      馃洅
+      <div class="cart-badge" id="cartBadge" style="display:none">0</div>
+    </div>
+    <div class="cart-info">
+      <div class="total-label">鍚堣</div>
+      <div class="total-price" id="cartTotal">0<small>鍏?/small></div>
+    </div>
+  </div>
+  <button class="btn-order" id="btnOrder" onclick="submitOrder()">鍘讳笅鍗?/button>
+</div>
+
+<!-- 璐墿杞﹀脊绐?-->
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="order-panel" id="orderPanel">
+  <div class="handle"></div>
+  <div class="panel-title">馃洅 璐墿杞?/div>
+  <div class="order-list" id="orderList"></div>
+  <div class="order-total">
+    <span class="tt">鍚堣</span>
+    <span class="tp" id="panelTotal">0<small>鍏?/small></span>
+  </div>
+  <div class="panel-actions">
+    <button class="btn-clear" onclick="clearCart()">娓呯┖</button>
+    <button class="btn-submit" onclick="submitOrder()">鎻愪氦璁㈠崟</button>
+  </div>
+</div>
+
+<!-- 鎴愬姛寮圭獥 -->
+<div class="success-toast" id="successToast">
+  <div class="emoji">馃帀</div>
+  <div class="msg">璁㈠崟宸插彂閫侊紒</div>
+  <div class="sub">璇峰姞寰俊 15840015715 纭</div>
+  <button class="btn-ok" onclick="closeSuccess()">鐭ラ亾浜?/button>
+</div>
+
+<script>
+// ===== 鑿滃崟鏁版嵁 =====
+const menuData = [
+  { cat: '馃専 鎷涚墝', items: [
+    { name: '鉂楀皷妞掕櫨婊?, price: 5, unit: '涓?, hot: true },
+    { name: '鉂楀ぇ娌硅竟', price: 20, unit: '涓?, tag: '涓嶅畾鏃舵湁' }
+  ]},
+  { cat: '馃ォ 鑲変覆', subtitle: '鐗涚緤鑲?涓茶捣', items: [
+    { name: '鐗涜倝', price: 2, unit: '涓? },
+    { name: '缇婅倝', price: 2, unit: '涓? },
+    { name: '鐚倝涓?, price: 1, unit: '涓? },
+    { name: '鐦︾墰', price: 3, unit: '涓? },
+    { name: '鉂楃敓绛?, price: 3, unit: '涓? },
+    { name: '鉂楁补杈?, price: 5, unit: '涓? },
+    { name: '鉂楁帓楠ㄤ覆', price: 3, unit: '涓? },
+    { name: '浜旇姳鑲夊嵎閲戦拡鑿?, price: 3, unit: '涓? }
+  ]},
+  { cat: '馃挵 2鍏冨尯', subtitle: '瀹炴儬璧伴噺', items: [
+    { name: '鑿滃嵎(閲戦拡鑿?棣欒彍)', price: 2, unit: '涓? },
+    { name: '杈ｆ', price: 2, unit: '涓? },
+    { name: '楸间父', price: 2, unit: '涓? },
+    { name: '楸艰眴鑵?, price: 2, unit: '涓? },
+    { name: '瀹炶泲', price: 2, unit: '涓? },
+    { name: '灏忚叞', price: 2, unit: '涓? },
+    { name: '鐔熺瓔', price: 2, unit: '涓? },
+    { name: '鏉跨瓔', price: 2, unit: '涓? },
+    { name: '闈㈢瓔', price: 2, unit: '涓? },
+    { name: '楦¤倝鑲?, price: 2, unit: '涓? },
+    { name: '楦¤儣', price: 2, unit: '涓? }
+  ]},
+  { cat: '馃挵 3鍏冨尯', subtitle: '浜烘皵蹇呯偣', items: [
+    { name: '楦＄毊', price: 3, unit: '涓? },
+    { name: '楦¤剢楠?, price: 3, unit: '涓? },
+    { name: '绛嬬毊', price: 3, unit: '涓? },
+    { name: '妫掟煇?, price: 3, unit: '涓? },
+    { name: '铓傝毐', price: 3, unit: '涓? },
+    { name: '缇婅剸绛?, price: 3, unit: '涓? },
+    { name: '绮夎偁', price: 3, unit: '涓? },
+    { name: '鐑らゼ', price: 3, unit: '涓? },
+    { name: '闈㈠寘鐗?, price: 3, unit: '涓? }
+  ]},
+  { cat: '馃ガ 绱犺彍', subtitle: '鎸夋妸/鎸夋媿', items: [
+    { name: '闊彍', price: 5, unit: '鎷? },
+    { name: '鐜夌背绮?, price: 5, unit: '鎶? },
+    { name: '璞嗙毊', price: 5, unit: '鎶? }
+  ]},
+  { cat: '馃挵 4鍏?', subtitle: '绮惧搧绯诲垪', items: [
+    { name: '蹇冪', price: 4, unit: '涓? },
+    { name: '椋庡共鑲?, price: 4, unit: '涓? },
+    { name: '瀹悗澶硅倝', price: 4, unit: '涓? },
+    { name: '楦＄繀', price: 8, unit: '涓? }
+  ]}
+];
+
+// ===== 璐墿杞︾姸鎬?=====
+let cart = {};
+
+// ===== 娓叉煋鑿滃崟 =====
+function renderMenu() {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  menuData.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'category';
+    
+    let subtitleHtml = cat.subtitle ? `<span class="cat-title" style="font-size:11px;color:#887766;">${cat.subtitle}</span>` : '';
+    
+    section.innerHTML = `
+      <div class="cat-header">
+        <div class="cat-tag">${cat.cat.split(' ')[0]}</div>
+        <div class="cat-title">${cat.cat.split(' ').slice(1).join(' ') || cat.cat}</div>
+        ${subtitleHtml}
+        <div class="cat-line"></div>
+      </div>
+      <div class="menu-list">
+        ${cat.items.map((item, idx) => {
+          const key = `${cat.cat}_${idx}`;
+          const count = cart[key] || 0;
+          const hotHtml = item.hot ? '<span class="hot">鉂?/span>' : '';
+          const tagHtml = item.tag ? `<span style="font-size:10px;color:#ff6633;border:1px solid rgba(255,102,51,0.3);padding:0 5px;border-radius:2px;margin-left:3px;">${item.tag}</span>` : '';
+          return `
+            <div class="menu-item" data-key="${key}" data-price="${item.price}">
+              <div class="item-info">
+                <div class="name">${hotHtml}${item.name}${tagHtml}</div>
+                <div class="desc">${item.price}鍏?${item.unit}</div>
+              </div>
+              <div class="item-right">
+                <div class="item-price">${item.price}<small>鍏?/small></div>
+                <div class="btn-group">
+                  <button class="btn-minus" onclick="changeQty('${key}', -1)">鈭?/button>
+                  <span class="item-count" id="count_${key}">${count || ''}</span>
+                  <button class="btn-plus" onclick="changeQty('${key}', 1)">+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+// ===== 淇敼鏁伴噺 =====
+function changeQty(key, delta) {
+  const item = findItem(key);
+  if (!item) return;
+  const current = cart[key] || 0;
+  const newQty = Math.max(0, current + delta);
+  if (newQty === 0) {
+    delete cart[key];
+  } else {
+    cart[key] = newQty;
+  }
+  updateUI(key);
+}
+
+function findItem(key) {
+  const [catTitle, idx] = key.split('_');
+  const cat = menuData.find(c => c.cat === catTitle);
+  if (cat && cat.items[idx]) return cat.items[idx];
+  return null;
+}
+
+function findItemByName(name) {
+  for (const cat of menuData) {
+    for (const item of cat.items) {
+      if (item.name === name) return item;
+    }
+  }
+  return null;
+}
+
+// ===== 鏇存柊UI =====
+function updateUI(key) {
+  const count = cart[key] || 0;
+  const el = document.getElementById(`count_${key}`);
+  if (el) el.textContent = count || '';
+  
+  updateCartBar();
+  updateOrderPanel();
+}
+
+function updateCartBar() {
+  const total = getTotal();
+  const count = getCount();
+  document.getElementById('cartTotal').innerHTML = total + '<small>鍏?/small>';
+  const badge = document.getElementById('cartBadge');
+  if (count > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
+  document.getElementById('btnOrder').disabled = count === 0;
+}
+
+function getTotal() {
+  let total = 0;
+  for (const [key, qty] of Object.entries(cart)) {
+    const item = findItem(key);
+    if (item) total += item.price * qty;
+  }
+  return total;
+}
+
+function getCount() {
+  return Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+// ===== 璐墿杞﹀脊绐?=====
+function toggleCart() {
+  const panel = document.getElementById('orderPanel');
+  const overlay = document.getElementById('overlay');
+  const isOpen = panel.classList.contains('show');
+  if (isOpen) {
+    panel.classList.remove('show');
+    overlay.classList.remove('show');
+  } else if (getCount() > 0) {
+    panel.classList.add('show');
+    overlay.classList.add('show');
+    updateOrderPanel();
+  }
+}
+
+function updateOrderPanel() {
+  const list = document.getElementById('orderList');
+  const total = getTotal();
+  document.getElementById('panelTotal').innerHTML = total + '<small>鍏?/small>';
+  
+  if (getCount() === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:30px 0;color:#8a7a6a;font-size:14px;">璐墿杞︾┖绌哄涔?馃洅</div>';
+    return;
+  }
+  
+  let html = '';
+  Object.entries(cart).forEach(([key, qty]) => {
+    const item = findItem(key);
+    if (!item || qty === 0) return;
+    html += `
+      <div class="order-item">
+        <div class="left">
+          <div class="oname">${item.name}</div>
+          <div class="oqty">${qty}${item.unit} 脳 ${item.price}鍏?/div>
+        </div>
+        <div class="right">
+          <div class="oprice">${item.price * qty}鍏?/div>
+          <button class="btn-minus" onclick="changeQty('${key}', -1)">鈭?/button>
+        </div>
+      </div>
+    `;
+  });
+  list.innerHTML = html;
+}
+
+// ===== 娓呯┖璐墿杞?=====
+function clearCart() {
+  const keys = Object.keys(cart);
+  cart = {};
+  keys.forEach(k => updateUI(k));
+  toggleCart();
+}
+
+// ===== 鎻愪氦璁㈠崟 =====
+function submitOrder() {
+  if (getCount() === 0) return;
+  
+  let msg = '馃敟 鏂拌鍗昞n';
+  msg += '鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣\n';
+  Object.entries(cart).forEach(([key, qty]) => {
+    const item = findItem(key);
+    if (item) {
+      msg += `${item.name} 脳 ${qty} = ${item.price * qty}鍏僜n`;
+    }
+  });
+  msg += '鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣\n';
+  msg += `馃挵 鍚堣锛?{getTotal()}鍏僜n`;
+  msg += '馃摓 15840015715';
+  
+  // 澶嶅埗鍒板壀璐存澘
+  navigator.clipboard.writeText(msg).then(() => {
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('orderPanel').classList.remove('show');
+    document.getElementById('successToast').classList.add('show');
+  }).catch(() => {
+    // 闄嶇骇鏂规
+    const textarea = document.createElement('textarea');
+    textarea.value = msg;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('orderPanel').classList.remove('show');
+    document.getElementById('successToast').classList.add('show');
+  });
+}
+
+function closeSuccess() {
+  document.getElementById('successToast').classList.remove('show');
+  // 娓呯┖璐墿杞?  const keys = Object.keys(cart);
+  cart = {};
+  keys.forEach(k => updateUI(k));
+}
+
+// ===== 鍚姩 =====
+renderMenu();
+updateCartBar();
+</script>
+</body>
+</html>
