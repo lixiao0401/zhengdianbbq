@@ -64,6 +64,12 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
 .btn-submit{background:linear-gradient(135deg,#ff6a00,#ff4400);color:#fff}
 .btn-submit:active{transform:scale(0.96)}
 
+/* 备注输入 */
+.remark-wrap{padding:8px 16px 4px}
+.remark-wrap label{display:block;color:#8a7a6a;font-size:12px;margin-bottom:4px}
+.remark-wrap textarea{width:100%;border:1px solid #e0d0c0;border-radius:10px;padding:8px 10px;font-size:13px;color:#4a2a1a;background:#fffcf8;resize:none;font-family:inherit;outline:none;transition:border .2s}
+.remark-wrap textarea:focus{border-color:#e85d00}
+
 /* 订单成功弹窗 */
 .order-success{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:16px;padding:24px;text-align:center;z-index:202;box-shadow:0 20px 60px rgba(0,0,0,.3);min-width:300px;max-width:90%}
 .order-success.show{display:block}
@@ -123,6 +129,11 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
   <div class="order-total">
     <span class="tt">合计</span>
     <span class="tp" id="panelTotal">0<small>元</small></span>
+  </div>
+  <!-- 备注 -->
+  <div class="remark-wrap">
+    <label for="orderRemark">📝 备注（口味/要求等）</label>
+    <textarea id="orderRemark" rows="2" placeholder="例：少辣、不要葱、多放孜然…"></textarea>
   </div>
   <div class="panel-actions">
     <button class="btn-clear" onclick="clearCart()">清空 🗑</button>
@@ -371,6 +382,16 @@ function submitOrder() {
   }
   msg += '━━━━━━━━━━━━━━━━\n';
   msg += '💰 合计：' + getTotal() + '元';
+  
+  // 取备注
+  const remark = document.getElementById('orderRemark').value.trim();
+  if (remark) {
+    msg += '\n━━━━━━━━━━━━━━━━\n';
+    msg += '📝 备注：' + remark;
+  }
+  
+  // 清空备注框
+  document.getElementById('orderRemark').value = '';
   
   // 显示订单
   document.getElementById('orderResult').textContent = msg;
