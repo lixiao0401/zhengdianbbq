@@ -81,6 +81,21 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
 .btn-ok{background:linear-gradient(135deg,#e85d00,#cc3300);color:#fff;border:none;padding:8px 32px;border-radius:16px;font-size:14px;font-weight:700;cursor:pointer}
 .btn-ok:active{transform:scale(0.96)}
 
+
+/* 备注弹窗 */
+.remark-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:24px;text-align:center;z-index:203;box-shadow:0 20px 60px rgba(0,0,0,.4);min-width:300px;max-width:90%}
+.remark-modal.show{display:block}
+.rm-title{font-size:18px;font-weight:900;color:#cc3300;margin-bottom:4px}
+.rm-sub{color:#8a7a6a;font-size:12px;margin-bottom:12px}
+.rm-textarea{width:100%;border:2px solid #e85d00;border-radius:12px;padding:10px 12px;font-size:14px;color:#4a2a1a;background:#fffcf8;resize:none;font-family:inherit;outline:none;min-height:60px}
+.rm-textarea:focus{border-color:#cc3300;box-shadow:0 0 0 3px rgba(232,93,0,0.15)}
+.rm-actions{display:flex;gap:10px;margin-top:14px}
+.rm-actions button{flex:1;padding:10px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer}
+.rm-skip{background:#f0e0d0;color:#885533}
+.rm-confirm{background:linear-gradient(135deg,#e85d00,#cc3300);color:#fff}
+.rm-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px}
+.rm-icons{font-size:20px}
+
 /* 推送状态提示 */
 .push-status{font-size:11px;color:#8a7a6a;margin-top:4px;min-height:16px}
 .push-status.ok{color:#22a855}
@@ -130,14 +145,21 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
     <span class="tt">合计</span>
     <span class="tp" id="panelTotal">0<small>元</small></span>
   </div>
-  <!-- 备注 -->
-  <div class="remark-wrap">
-    <label for="orderRemark">📝 备注（口味/要求等）</label>
-    <textarea id="orderRemark" rows="2" placeholder="例：少辣、不要葱、多放孜然…"></textarea>
-  </div>
   <div class="panel-actions">
     <button class="btn-clear" onclick="clearCart()">清空 🗑</button>
     <button class="btn-submit" onclick="submitOrder()">提交订单</button>
+  </div>
+</div>
+
+
+<!-- 备注弹窗 -->
+<div class="remark-modal" id="remarkModal">
+  <div class="rm-title">📝 有特殊要求吗？</div>
+  <div class="rm-sub">口味、辣度、配料要求都可以写~</div>
+  <textarea class="rm-textarea" id="rmInput" rows="3" placeholder="例：少辣、不要葱、多放孜然、烤嫩一点…"></textarea>
+  <div class="rm-actions">
+    <button class="rm-skip" onclick="skipRemark()">跳过 ⏭</button>
+    <button class="rm-confirm" onclick="confirmRemark()">确认下单 ✅</button>
   </div>
 </div>
 
@@ -361,6 +383,8 @@ function clearCart() {
 }
 
 // ====== 提交订单 ======
+let pendingRemark = '';
+
 function submitOrder() {
   if (getCount() === 0) return;
   
@@ -368,7 +392,25 @@ function submitOrder() {
   document.getElementById('orderPanel').classList.remove('show');
   document.getElementById('overlay').classList.remove('show');
   
-  // 生成订单文本
+  // 弹出备注框
+  document.getElementById('rmInput').value = '';
+  document.getElementById('remarkModal').classList.add('show');
+}
+
+function skipRemark() {
+  document.getElementById('remarkModal').classList.remove('show');
+  pendingRemark = '';
+  doSubmit();
+}
+
+function confirmRemark() {
+  const r = document.getElementById('rmInput').value.trim();
+  document.getElementById('remarkModal').classList.remove('show');
+  pendingRemark = r;
+  doSubmit();
+}
+
+function doSubmit() {
   const d = new Date();
   const time = (d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();
   let msg = time + '\n';
@@ -384,24 +426,17 @@ function submitOrder() {
   msg += '━━━━━━━━━━━━━━━━\n';
   msg += '💰 合计：' + getTotal() + '元';
   
-  // 取备注
-  const remark = document.getElementById('orderRemark').value.trim();
-  if (remark) {
+  if (pendingRemark) {
     msg += '\n━━━━━━━━━━━━━━━━\n';
-    msg += '📝 备注：' + remark;
+    msg += '📝 备注：' + pendingRemark;
   }
+  pendingRemark = '';
   
-  // 清空备注框
-  document.getElementById('orderRemark').value = '';
-  
-  // 显示订单
   document.getElementById('orderResult').textContent = msg;
   document.getElementById('orderSuccess').classList.add('show');
   
-  // 复制到剪贴板
   navigator.clipboard.writeText(msg + '\n\n📞 花花 15840015715').catch(() => {});
   
-  // === PushPlus推送token（内嵌在页面，用于直接推送） ===
   const PUSH_TOKEN = '16c319199aa4404c97baefb12dcd6a4b';
   const pushStatus = document.getElementById('pushStatus');
   pushStatus.textContent = '⏳ 正在推送微信通知...';
@@ -414,17 +449,12 @@ function submitOrder() {
     template: 'txt'
   };
   
-  // 方法1：先尝试本地服务器推送（当顾客通过本地服务器访问时）
   fetch('/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       time: time,
-      items: items.map(i => ({
-        name: i.name,
-        qty: i.qty,
-        subtotal: i.subtotal
-      })),
+      items: items.map(i => ({ name: i.name, qty: i.qty, subtotal: i.subtotal })),
       total: getTotal()
     })
   })
@@ -438,14 +468,12 @@ function submitOrder() {
     }
   })
   .catch(() => {
-    // 方法2：本地服务器不可用，直接浏览器推送到PushPlus
     fetch('https://www.pushplus.plus/send', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     }).catch(() => {});
-    // no-cors模式下无法读取结果，但请求已发出
     setTimeout(() => {
       pushStatus.textContent = '📋 订单已复制，请发给花花微信';
       pushStatus.className = 'push-status';
