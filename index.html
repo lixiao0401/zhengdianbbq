@@ -83,18 +83,21 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
 
 
 /* 备注弹窗 */
-.remark-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:24px;text-align:center;z-index:203;box-shadow:0 20px 60px rgba(0,0,0,.4);min-width:300px;max-width:90%}
+.remark-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:24px;text-align:left;z-index:203;box-shadow:0 20px 60px rgba(0,0,0,.4);min-width:320px;max-width:92%}
 .remark-modal.show{display:block}
-.rm-title{font-size:18px;font-weight:900;color:#cc3300;margin-bottom:4px}
-.rm-sub{color:#8a7a6a;font-size:12px;margin-bottom:12px}
-.rm-textarea{width:100%;border:2px solid #e85d00;border-radius:12px;padding:10px 12px;font-size:14px;color:#4a2a1a;background:#fffcf8;resize:none;font-family:inherit;outline:none;min-height:60px}
-.rm-textarea:focus{border-color:#cc3300;box-shadow:0 0 0 3px rgba(232,93,0,0.15)}
+.rm-title{text-align:center;font-size:18px;font-weight:900;color:#cc3300;margin-bottom:2px}
+.rm-sub{text-align:center;color:#8a7a6a;font-size:12px;margin-bottom:14px}
+.rm-field{margin-bottom:10px}
+.rm-label{display:block;color:#4a2a1a;font-size:13px;font-weight:700;margin-bottom:3px}
+.rm-label .req{color:#cc3300}
+.rm-input{width:100%;border:1.5px solid #ddd;border-radius:10px;padding:9px 12px;font-size:14px;color:#4a2a1a;background:#fffcf8;font-family:inherit;outline:none;transition:border .2s}
+.rm-input:focus{border-color:#e85d00;box-shadow:0 0 0 3px rgba(232,93,0,0.1)}
+.rm-textarea{width:100%;border:1.5px solid #ddd;border-radius:10px;padding:9px 12px;font-size:14px;color:#4a2a1a;background:#fffcf8;resize:none;font-family:inherit;outline:none;min-height:50px;transition:border .2s}
+.rm-textarea:focus{border-color:#e85d00;box-shadow:0 0 0 3px rgba(232,93,0,0.1)}
 .rm-actions{display:flex;gap:10px;margin-top:14px}
 .rm-actions button{flex:1;padding:10px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer}
 .rm-skip{background:#f0e0d0;color:#885533}
 .rm-confirm{background:linear-gradient(135deg,#e85d00,#cc3300);color:#fff}
-.rm-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px}
-.rm-icons{font-size:20px}
 
 /* 推送状态提示 */
 .push-status{font-size:11px;color:#8a7a6a;margin-top:4px;min-height:16px}
@@ -152,11 +155,31 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
 </div>
 
 
-<!-- 备注弹窗 -->
+<!-- 联系信息弹窗 -->
 <div class="remark-modal" id="remarkModal">
-  <div class="rm-title">📝 有特殊要求吗？</div>
-  <div class="rm-sub">口味、辣度、配料要求都可以写~</div>
-  <textarea class="rm-textarea" id="rmInput" rows="3" placeholder="例：少辣、不要葱、多放孜然、烤嫩一点…"></textarea>
+  <div class="rm-title">📋 留下联系信息</div>
+  <div class="rm-sub">方便我们为您服务~</div>
+  
+  <div class="rm-field">
+    <label class="rm-label">👤 称呼 <span class="req">*</span></label>
+    <input class="rm-input" id="rmName" type="text" placeholder="您的称呼" maxlength="20">
+  </div>
+  
+  <div class="rm-field">
+    <label class="rm-label">📞 手机号</label>
+    <input class="rm-input" id="rmPhone" type="tel" placeholder="留手机号方便联系" maxlength="11">
+  </div>
+  
+  <div class="rm-field">
+    <label class="rm-label">📍 地址</label>
+    <input class="rm-input" id="rmAddr" type="text" placeholder="送到哪里（选填）" maxlength="100">
+  </div>
+  
+  <div class="rm-field">
+    <label class="rm-label">📝 备注</label>
+    <textarea class="rm-textarea" id="rmInput" rows="2" placeholder="口味要求：少辣、不要葱、多放孜然…"></textarea>
+  </div>
+  
   <div class="rm-actions">
     <button class="rm-skip" onclick="skipRemark()">跳过 ⏭</button>
     <button class="rm-confirm" onclick="confirmRemark()">确认下单 ✅</button>
@@ -383,30 +406,42 @@ function clearCart() {
 }
 
 // ====== 提交订单 ======
+let pendingName = '';
+let pendingPhone = '';
+let pendingAddr = '';
 let pendingRemark = '';
 
 function submitOrder() {
   if (getCount() === 0) return;
   
-  // 关闭面板
   document.getElementById('orderPanel').classList.remove('show');
   document.getElementById('overlay').classList.remove('show');
   
-  // 弹出备注框
+  // 清空表单
+  document.getElementById('rmName').value = '';
+  document.getElementById('rmPhone').value = '';
+  document.getElementById('rmAddr').value = '';
   document.getElementById('rmInput').value = '';
+  
   document.getElementById('remarkModal').classList.add('show');
+  document.getElementById('rmName').focus();
 }
 
 function skipRemark() {
   document.getElementById('remarkModal').classList.remove('show');
+  pendingName = '';
+  pendingPhone = '';
+  pendingAddr = '';
   pendingRemark = '';
   doSubmit();
 }
 
 function confirmRemark() {
-  const r = document.getElementById('rmInput').value.trim();
   document.getElementById('remarkModal').classList.remove('show');
-  pendingRemark = r;
+  pendingName = document.getElementById('rmName').value.trim();
+  pendingPhone = document.getElementById('rmPhone').value.trim();
+  pendingAddr = document.getElementById('rmAddr').value.trim();
+  pendingRemark = document.getElementById('rmInput').value.trim();
   doSubmit();
 }
 
@@ -426,10 +461,16 @@ function doSubmit() {
   msg += '━━━━━━━━━━━━━━━━\n';
   msg += '💰 合计：' + getTotal() + '元';
   
-  if (pendingRemark) {
+  if (pendingName || pendingPhone || pendingAddr || pendingRemark) {
     msg += '\n━━━━━━━━━━━━━━━━\n';
-    msg += '📝 备注：' + pendingRemark;
   }
+  if (pendingName) msg += '👤 ' + pendingName + '\n';
+  if (pendingPhone) msg += '📞 ' + pendingPhone + '\n';
+  if (pendingAddr) msg += '📍 ' + pendingAddr + '\n';
+  if (pendingRemark) msg += '📝 ' + pendingRemark + '\n';
+  pendingName = '';
+  pendingPhone = '';
+  pendingAddr = '';
   pendingRemark = '';
   
   document.getElementById('orderResult').textContent = msg;
