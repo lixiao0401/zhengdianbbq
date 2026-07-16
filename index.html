@@ -145,41 +145,53 @@ body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f5e6d3;m
 <script>
 // ====== 菜单数据 ======
 const menuData = [
-  { cat: '🍖 招牌必点', items: [
-    { name: '秘制大油边/大串', price: 5, unit: '串', hot: true },
-    { name: '秘制牛肉大串', price: 20, unit: '串', tag: '桌桌必点🔥' }
+  { cat: '🔥 招牌必点', items: [
+    { name: '尖椒虾滑', price: 5, unit: '串', hot: false },
+    { name: '大油边', price: 20, unit: '串', tag: '不定时有' }
   ]},
-  { cat: '🍢 经典小串', subtitle: '羊肉小串/牛肉小串', items: [
-    { name: '羊肉小串', price: 2, unit: '串' },
-    { name: '牛肉小串', price: 2, unit: '串' },
-    { name: '猪脆骨小串', price: 1, unit: '串' },
-    { name: '风干油边', price: 3, unit: '串' },
-    { name: '秘制鸡心管', price: 3, unit: '串' },
-    { name: '秘制猪心管', price: 3, unit: '串' },
-    { name: '鸡手/鸡头', price: 2, unit: '串' },
-    { name: '酱油筋', price: 2, unit: '串' },
-    { name: '烤菜卷', price: 2, unit: '串' },
-    { name: '烤饼/烧饼', price: 2, unit: '串' },
-    { name: '蘑菇/土豆', price: 2, unit: '串' },
-    { name: '烤面包片', price: 3, unit: '串' }
+  { cat: '🥩 牛羊肉(5串起)', subtitle: '牛羊肉5串起', items: [
+    { name: '牛肉', price: 2, unit: '串' },
+    { name: '羊肉', price: 2, unit: '串' },
+    { name: '猪肉串', price: 1, unit: '串' },
+    { name: '瘦牛', price: 3, unit: '串' },
+    { name: '生筋', price: 3, unit: '串', hot: true },
+    { name: '油边', price: 5, unit: '串', hot: true },
+    { name: '排骨串', price: 3, unit: '串', hot: true },
+    { name: '五花肉卷金针菇', price: 3, unit: '串' }
   ]},
-  { cat: '🥩 特色猪肉串', subtitle: '外脊皮/猪连体', items: [
-    { name: '秘制五花肉', price: 3, unit: '串' },
-    { name: '秘制猪连体', price: 3, unit: '串' },
-    { name: '猪腰子', price: 3, unit: '串' },
-    { name: '烤火烧/馒头', price: 2, unit: '串' },
-    { name: '烤面包片', price: 3, unit: '串' }
+  { cat: '💰 2元区', subtitle: '实惠走量', items: [
+    { name: '菜卷(金针菇/香菜)', price: 2, unit: '串' },
+    { name: '辣椒', price: 2, unit: '串' },
+    { name: '鱼丸', price: 2, unit: '串' },
+    { name: '鱼豆腐', price: 2, unit: '串' },
+    { name: '实蛋', price: 2, unit: '串' },
+    { name: '小腰', price: 2, unit: '串' },
+    { name: '熟筋', price: 2, unit: '串' },
+    { name: '板筋', price: 2, unit: '串' },
+    { name: '面筋', price: 2, unit: '串' },
+    { name: '鸡肉肠', price: 2, unit: '串' },
+    { name: '鸡胗', price: 2, unit: '串' }
   ]},
-  { cat: '🦐 海鲜类', subtitle: '小黄鱼/鲽鱼头', items: [
-    { name: '大虾', price: 5, unit: '串' },
-    { name: '多春鱼', price: 5, unit: '串' },
-    { name: '鱿鱼串', price: 5, unit: '串' }
+  { cat: '💰 3元区', subtitle: '人气必点', items: [
+    { name: '鸡皮', price: 3, unit: '串' },
+    { name: '鸡脆骨', price: 3, unit: '串' },
+    { name: '筋皮', price: 3, unit: '串' },
+    { name: '棒鱼', price: 3, unit: '串' },
+    { name: '蚂蚱', price: 3, unit: '串' },
+    { name: '羊脖筋', price: 3, unit: '串' },
+    { name: '粉肠', price: 3, unit: '串' },
+    { name: '烤饼', price: 3, unit: '串' }
   ]},
-  { cat: '🥬 素菜类', subtitle: '营养均衡才健康', items: [
-    { name: '烤韭菜', price: 4, unit: '串' },
-    { name: '烤茄子/土豆', price: 4, unit: '串' },
-    { name: '烤青椒/金针菇', price: 4, unit: '串' },
-    { name: '大虾', price: 8, unit: '串' }
+  { cat: '🥬 素菜', subtitle: '按把/按拍', items: [
+    { name: '韭菜', price: 5, unit: '拍' },
+    { name: '玉米粒', price: 5, unit: '把' },
+    { name: '豆皮', price: 5, unit: '把' }
+  ]},
+  { cat: '💰 4元+', subtitle: '精品系列', items: [
+    { name: '心管', price: 4, unit: '串' },
+    { name: '风干肠', price: 4, unit: '串' },
+    { name: '宫后夹肉', price: 4, unit: '串' },
+    { name: '鸡翅', price: 8, unit: '串' }
   ]}
 ];
 
